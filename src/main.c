@@ -25,15 +25,15 @@ void convert(char *input){
     int number;
     int base;
     sscanf(input, "(%d)%d", &number, &base);
-    printf("\t[%s]:%d %d\n", input, number, base);
+    //printf("\t[%s]:%d %d\n", input, number, base);
 
     //convert the inputed number to decimal base
     double convertedValue = 0;
     int currentExponent = 0;
     while(number > 0){
-        printf("Current number %d, current exponent %d, current converted value %.2f", number, currentExponent, convertedValue);
+        //printf("Current number %d, current exponent %d, current converted value %.2f", number, currentExponent, convertedValue);
         int currentUnitToConvert = number%10;
-        printf(" current unit to convert: %d\n", currentUnitToConvert);
+        //printf(" current unit to convert: %d\n", currentUnitToConvert);
 
         //add the value to accu: value is u*base^weight
         convertedValue += currentUnitToConvert*power(base, currentExponent);
@@ -41,7 +41,7 @@ void convert(char *input){
         number = number/10;
         currentExponent++;
     }
-    printf("Value: %.2f\n", convertedValue);
+    printf("Value: (%.2f)10\n", convertedValue);
 }
 
 /**
@@ -56,10 +56,12 @@ void convert(char *input){
  */
 int main(int argc, char **argv){
     printf("\033[0;104m[ + ]\t%sWELLCOME TO THE %sBase %sCONVERTER%s\n", COLOR_RED, COLOR_BBLU, COLOR_RED, COLOR_RST);
+    printf("\033[0;104m[ * ]\t%sInput form: ([valueToConvert])[base]\n\texample: (0101)2 => (5)10\n", COLOR_RST);
 
     char *in;
-    int size = getPipeInput(&in);
-    printf("[%s] => %d\n", in, size);
+    //int size = getPipeInput(&in);
+    //printf("[%s] => %d\n", in, size);
+    getPipeInput(&in);
 
     convert(in);
     //for(int i=0; i<12; i++) printf("\t%d^%d=%.2f\n", 2, i, power(2, i));
