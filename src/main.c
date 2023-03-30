@@ -25,11 +25,10 @@
  * For base bigger than 9 :
  * Input form : (23 2F D4)16
 */
-void convertToBaseTen(char *input){
+void convertSmallBaseToBaseTen(char *input, int base){
     /* input form (numbers)base*/
     int number;
-    int base;
-    sscanf(input, "(%d)%d", &number, &base);
+    sscanf(input, "%d", &number);
     //printf("\t[%s]:%d %d\n", input, number, base);
 
     //convert the inputed number to decimal base
@@ -63,9 +62,10 @@ void convertBigBaseToBaseTen(char *input, int base){
             /*
              * the char at the end of a number is an \0 if its the LSB otherwithe a space
             */
-            char stopChar = currentExponent==0?'\0':' ';
-            printf("Let's substring the current number : from %d to %d\n", cursor, indexOfFromIndex(input, cursor+1, stopChar));
-            char *val = substring(input, cursor, indexOfFromIndex(input, cursor+1, stopChar));
+            //char stopChar = currentExponent==0?'\0':' ';
+            //printf("Let's substring the current number : from %d to %d\n", cursor, indexOfFromIndex(input, cursor+1, stopChar));
+            //char *val = substring(input, cursor, indexOfFromIndex(input, cursor+1, stopChar));
+            char *val = substring(input, cursor, indexOfFromIndex(input, cursor+1, ' '));
             int currentNumber = 0;
             sscanf(val, "%d", &currentNumber);
 
@@ -107,42 +107,27 @@ int getInputedBase(char *input){
  */
 int main(int argc, char **argv){
     printf("\033[0;104m[ + ]\t%sWELLCOME TO THE %sBase %sCONVERTER%s\n", COLOR_RED, COLOR_BBLU, COLOR_RED, COLOR_RST);
-    printf("\033[0;104m[ * ]\t%sInput form: ([valueToConvert])[base]\n\texample: (0101)2 => (5)10\n", COLOR_RST);
+    //printf("\033[0;104m[ * ]\t%sInput form: ([valueToConvert])[base]\n\texample: (0101)2 => (5)10\n", COLOR_RST);
 
     char *in;
-    //int size = getPipeInput(&in);
-    //printf("[%s] => %d\n", in, size);
     getPipeInput(&in);
 
-    /*
-    char *sub;
-    sub = substring(in, 1, 4);
-    printf("substring : %s\n", sub);
-    free(sub);
-    sub = NULL;
-    printf("First index of space in input is: %d\n", indexOf(in, ' '));*/
-
-    //convertToBaseTen(in);
-    //for(int i=0; i<12; i++) printf("\t%d^%d=%.2f\n", 2, i, power(2, i));
-
     int base = getInputedBase(in);
-    char *inputNumber = substring(in, 0, lastIndexOf(in, ' '));
+    char *inputNumber = substring(in, 0, lastIndexOf(in, ' ')+1);
     if(base < 9){
         //extract small base
+        convertSmallBaseToBaseTen(inputNumber, base);
     }else if(base == 16){
         // extract from base 16
     }else{
         //extract from big base
-        convertBigBaseToBaseTen(in, base);
+        convertBigBaseToBaseTen(inputNumber, base);
     }
     free(inputNumber);
     inputNumber = NULL;
 
     free(in);
     in = NULL;
-
-    //printf("\t%d^%d=%.2f\n", 2, 2, power(2, 2));
-    //printf("\t%d^%d=%.2f\n", 2, -1, power(2, -1));
 
     // Exit success
     return (EXIT_SUCCESS);
