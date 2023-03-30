@@ -20,6 +20,13 @@
  */
 int getPipeInput(char **input);
 
+unsigned int len(const char *word);
+
+char *substring(char *string, int startIndex, int endIndex);
+
+int indexOfFromIndex(const char *string, int startIndex, const char search);
+int indexOf(const char *string, const char search);
+
 /**
  * \fn clrInputBuffer()
  * \author Vernhes Yohann <yohann.vernhes@gmail.com>

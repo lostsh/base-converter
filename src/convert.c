@@ -7,8 +7,8 @@
  * Convert module.
  */
 
-#include <stdio.h>  // printf getchar
-#include <stdlib.h> //alloc
+//#include <stdio.h>  // printf getchar
+//#include <stdlib.h> //alloc
 #include "convert.h"
 
 double power(int number, int exponent){
