@@ -96,10 +96,8 @@ int getInputedBase(char *input){
 }
 
 void convertDecimalToAnyBase(double decimal, int base){
-    char *convertedValue = malloc(sizeof(char));
-    //char *convertedValue;
-    int convertedLength = 1;
-    *(convertedValue) = '\0';
+    int *convertedNumberReversed = malloc(sizeof(int));
+    int convertedNumberLength = 0;
 
     // convert the int part to bin
     int dividend = (int)decimal;
@@ -110,24 +108,34 @@ void convertDecimalToAnyBase(double decimal, int base){
         dividend = quotient;
         printf("Chiffre a noter (reste): %d (et le truc a re-diviser %d)\n", reminder, quotient);
 
-        // reminder from in to string
-        int numSize = 1;
-        while (reminder/(int)power(10, numSize) > 0) numSize++;
-        char strReminder[numSize+1];
-        printf("Num size : %d\n", numSize);
-        sprintf(strReminder, "%d", reminder);
-
-        // concat the current num with the reminder
-        convertedLength = convertedLength+numSize+1;
-        convertedValue = realloc(convertedValue, (convertedLength)*sizeof(char));
-        sprintf(convertedValue+indexOf(convertedValue, '\0'), " %s", strReminder);
-
-        printf("SCconverted number is: %s\nAlloc size: %d\n", convertedValue, convertedLength);
+        // add the current value to the stack
+        convertedNumberReversed = realloc(convertedNumberReversed, (convertedNumberLength+1)*sizeof(int));
+        *(convertedNumberReversed+convertedNumberLength) = reminder;
+        convertedNumberLength++;
     }
 
-    printf("Final value [%s]\n", convertedValue);
-    //for(int i=0; i<convertedLength; i++) printf("%c", *(convertedValue+i));
+    //for(int i=0; i<convertedNumberLength; i++) printf("%d ", convertedNumberReversed[i]);
     //printf("\n");
+
+    //now reverse the array from msb to lsb in a string
+    char *convertedValue = malloc(sizeof(char));
+    int convertedSize = 1;
+    *(convertedValue) = '\0';
+    for(int i=convertedNumberLength-1; i>=0; i--){
+        int num = convertedNumberReversed[i];
+        int numSize = 1;
+        while (num/(int)power(10, numSize) > 0) numSize++;
+        char strReminder[numSize+1];
+        sprintf(strReminder, "%d", num);
+
+        // concat the current num with the reminder
+        convertedSize = convertedSize+numSize+1;
+        convertedValue = realloc(convertedValue, (convertedSize)*sizeof(char));
+        sprintf(convertedValue+indexOf(convertedValue, '\0'), " %s", strReminder);
+    }
+    free(convertedNumberReversed);
+
+    printf("Final value [%s]\n", convertedValue);
 
     free(convertedValue);
 }
