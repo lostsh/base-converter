@@ -96,6 +96,12 @@ int getInputedBase(char *input){
 }
 
 void convertDecimalToAnyBase(double decimal, int base){
+    char *convertedValue = malloc(sizeof(char));
+    //char *convertedValue;
+    int convertedLength = 1;
+    *(convertedValue) = '\0';
+
+    // convert the int part to bin
     int dividend = (int)decimal;
     while (dividend > 0){
         int reminder = dividend%base;
@@ -103,8 +109,27 @@ void convertDecimalToAnyBase(double decimal, int base){
         printf("%d/%d=%d*%d+%d\n", dividend, base, base, quotient, reminder);
         dividend = quotient;
         printf("Chiffre a noter (reste): %d (et le truc a re-diviser %d)\n", reminder, quotient);
+
+        // reminder from in to string
+        int numSize = 1;
+        while (reminder/(int)power(10, numSize) > 0) numSize++;
+        char strReminder[numSize+1];
+        printf("Num size : %d\n", numSize);
+        sprintf(strReminder, "%d", reminder);
+
+        // concat the current num with the reminder
+        convertedLength = convertedLength+numSize+1;
+        convertedValue = realloc(convertedValue, (convertedLength)*sizeof(char));
+        sprintf(convertedValue+indexOf(convertedValue, '\0'), " %s", strReminder);
+
+        printf("SCconverted number is: %s\nAlloc size: %d\n", convertedValue, convertedLength);
     }
-    
+
+    printf("Final value [%s]\n", convertedValue);
+    //for(int i=0; i<convertedLength; i++) printf("%c", *(convertedValue+i));
+    //printf("\n");
+
+    free(convertedValue);
 }
 
 /**
@@ -142,6 +167,14 @@ int main(int argc, char **argv){
     in = NULL;
 
     convertDecimalToAnyBase(5.998, 2);
+    printf("\n");
+    convertDecimalToAnyBase(4, 2);
+    printf("\n");
+    convertDecimalToAnyBase(87987988, 209);
+    printf("\n");
+    convertDecimalToAnyBase(173, 16);
+    printf("\n");
+    convertBigBaseToBaseTen("10 13 ", 16);
     printf("\n");
 
     // Exit success
