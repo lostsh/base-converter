@@ -48,62 +48,51 @@ void convertToBaseTen(char *input){
     }
     printf("Value: (%.2f)10\n", convertedValue);
 }
-/* For input base > 9 */
-void convertBigBaseToBaseTen(char *input){
-    int base = 0;
+/* For input base > 9 
+ * input must have no base inside number space seperated 
+ * with a space at the end
+ */
+void convertBigBaseToBaseTen(char *input, int base){
     double convertedValue = 0;
     
     int cursor = len(input)-1;
     int currentExponent = 0;
     while (cursor >= 0){
-        char c = *(input+cursor);
-        //printf("current char is: [%c]\n", c);
-
         // get the number base : 
         if((cursor-1 >= 0 && *(input+(cursor-1)) == ' ') || cursor==0 ){
-            char *val;
-            // first number on the right is the base
-            if(indexOfFromIndex(input, cursor+1, ' ') == -1){
-                val = substring(input, cursor, len(input));
-                //printf("\t\t\t\t\t\t\t BASE IS : %s\n", val);
-                sscanf(val, "%d", &base);
-                //printf("Base : %d\n", base);
-            }else{
-                //get the numbers
-                val = substring(input, cursor, indexOfFromIndex(input, cursor+1, ' '));
-                int currentNumber = 0;
-                //printf("\t\t\t\t\t\t\t VAL IS : %s\n", val);
-                sscanf(val, "%d", &currentNumber);
-                //printf("Current Number: %d\n", currentNumber);
-                
-                // add the current num : convert to decimal value
-                convertedValue += currentNumber*power(base, currentExponent);
-                currentExponent++;
-            }
+            /*
+             * the char at the end of a number is an \0 if its the LSB otherwithe a space
+            */
+            char stopChar = currentExponent==0?'\0':' ';
+            printf("Let's substring the current number : from %d to %d\n", cursor, indexOfFromIndex(input, cursor+1, stopChar));
+            char *val = substring(input, cursor, indexOfFromIndex(input, cursor+1, stopChar));
+            int currentNumber = 0;
+            sscanf(val, "%d", &currentNumber);
+
+            // add the current num : convert to decimal value
+            convertedValue += currentNumber * power(base, currentExponent);
+            currentExponent++;
+
             free(val);
         }
 
         cursor--;
     }
     
-
-    //convert the inputed number to decimal base
-    /*
-    double convertedValue = 0;
-    int currentExponent = 0;
-    while(number > 0){
-        //printf("Current number %d, current exponent %d, current converted value %.2f", number, currentExponent, convertedValue);
-        int currentUnitToConvert = number%10;
-        //printf(" current unit to convert: %d\n", currentUnitToConvert);
-
-        //add the value to accu: value is u*base^weight
-        convertedValue += currentUnitToConvert*power(base, currentExponent);
-        // remaning number
-        number = number/10;
-        currentExponent++;
-    }
-    */
     printf("Value: (%.2f)10\n", convertedValue);
+}
+
+/* the base is the first number of the right */
+int getInputedBase(char *input){
+    int base = -1;
+    int lastSpaceIndex = lastIndexOf(input, ' ');
+    if(lastSpaceIndex != -1){
+        //return in put base
+        char *val = substring(input, lastSpaceIndex+1, len(input));
+        sscanf(val, "%d", &base);
+        free(val);
+    }
+    return base;
 }
 
 /**
@@ -134,8 +123,20 @@ int main(int argc, char **argv){
     printf("First index of space in input is: %d\n", indexOf(in, ' '));*/
 
     //convertToBaseTen(in);
-    convertBigBaseToBaseTen(in);
     //for(int i=0; i<12; i++) printf("\t%d^%d=%.2f\n", 2, i, power(2, i));
+
+    int base = getInputedBase(in);
+    char *inputNumber = substring(in, 0, lastIndexOf(in, ' '));
+    if(base < 9){
+        //extract small base
+    }else if(base == 16){
+        // extract from base 16
+    }else{
+        //extract from big base
+        convertBigBaseToBaseTen(in, base);
+    }
+    free(inputNumber);
+    inputNumber = NULL;
 
     free(in);
     in = NULL;
