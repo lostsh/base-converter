@@ -95,6 +95,18 @@ int getInputedBase(char *input){
     return base;
 }
 
+void convertDecimalToAnyBase(double decimal, int base){
+    int dividend = (int)decimal;
+    while (dividend > 0){
+        int reminder = dividend%base;
+        int quotient = (dividend-reminder)/base;
+        printf("%d/%d=%d*%d+%d\n", dividend, base, base, quotient, reminder);
+        dividend = quotient;
+        printf("Chiffre a noter (reste): %d (et le truc a re-diviser %d)\n", reminder, quotient);
+    }
+    
+}
+
 /**
  * \fn int main(int argc, char** argv)
  * \author Vernhes Yohann <yohann.vernhes@gmail.com>
@@ -108,7 +120,7 @@ int getInputedBase(char *input){
 int main(int argc, char **argv){
     printf("\033[0;104m[ + ]\t%sWELLCOME TO THE %sBase %sCONVERTER%s\n", COLOR_RED, COLOR_BBLU, COLOR_RED, COLOR_RST);
     //printf("\033[0;104m[ * ]\t%sInput form: ([valueToConvert])[base]\n\texample: (0101)2 => (5)10\n", COLOR_RST);
-
+    
     char *in;
     getPipeInput(&in);
 
@@ -128,6 +140,9 @@ int main(int argc, char **argv){
 
     free(in);
     in = NULL;
+
+    convertDecimalToAnyBase(5.998, 2);
+    printf("\n");
 
     // Exit success
     return (EXIT_SUCCESS);
