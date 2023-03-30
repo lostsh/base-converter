@@ -54,11 +54,35 @@ void convertBigBaseToBaseTen(char *input){
     int number = 0;
     
     int cursor = len(input)-1;
-    int isReadingNumber = 0; //tell if you are reading the actual number of the base
-    while (cursor > 0){
+    //int isReadingNumber = 0; //tell if you are reading the actual number of the base
+    while (cursor >= 0){
         char c = *(input+cursor);
         printf("current char is: [%c]\n", c);
 
+        // get the number base : 
+        if((cursor-1 >= 0 && *(input+(cursor-1)) == ' ') || cursor==0 ){
+            char *val;
+            // first number on the right is the base
+            if(indexOfFromIndex(input, cursor+1, ' ') == -1){
+                val = substring(input, cursor, len(input));
+                //printf("\t\t\t\t\t\t\t BASE IS : %s\n", val);
+                sscanf(val, "%d", &base);
+                //printf("Base : %d\n", base);
+            }else{
+                //get the numbers
+                val = substring(input, cursor, indexOfFromIndex(input, cursor+1, ' '));
+                int currentNumber = 0;
+                //printf("\t\t\t\t\t\t\t VAL IS : %s\n", val);
+                sscanf(val, "%d", &currentNumber);
+                //printf("Current Number: %d\n", currentNumber);
+            }
+            free(val);
+        }
+
+        // get the numbers
+
+
+        /*
         if( (c == '(' || c == ')')) isReadingNumber = !isReadingNumber;
         printf("Is actually reading the inside of the brackets: %s, (value: %d)\n", (isReadingNumber?"yes":"no"), isReadingNumber);
 
@@ -66,7 +90,7 @@ void convertBigBaseToBaseTen(char *input){
         if(isReadingNumber){
             printf("Read the content\n");
             // convert the number
-            if(cursor-1 > 0 && (*(input+(cursor-1)) == ' ' /*|| *(input+(cursor-1)) == '('*/)){
+            if(cursor-1 > 0 && (*(input+(cursor-1)) == ' ')){
                 printf("Get a number value\n");
                 char *val = substring(input, cursor, indexOfFromIndex(input, cursor+1, ' '));
                 printf("\t\t\t\t\t\t\t VAL IS : %s\n", val);
@@ -88,7 +112,7 @@ void convertBigBaseToBaseTen(char *input){
             // convert base value to integer
             sscanf(baseStr, "%d", &base);
             printf("La base est donc : %d\n", base);
-        }
+        }*/
 
         cursor--;
     }
@@ -110,7 +134,7 @@ void convertBigBaseToBaseTen(char *input){
         currentExponent++;
     }
     printf("Value: (%.2f)10\n", convertedValue);*/
-    printf("Valeur : %d", number);
+    printf("Valeur : %d\n", number);
 }
 
 /**
