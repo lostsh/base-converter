@@ -4,7 +4,12 @@
  * \author Vernhes Yohann <yohann.vernhes@gmail.com>
  * \date 31 March 2023 
  * \brief Base converter.
- * Convert module.
+ * Convert module. This module allow
+ * to convert numbers from any 
+ * numerical base
+ * to any numerical base.
+ * Using only high level primitives.
+ * First version : scrappy.
  */
 
 #include <stdio.h>  // printf getchar
@@ -24,6 +29,19 @@ double power(int number, int exponent){
     // if exp neg then compute neg pow
     if(exponent<0) result = 1/result;
     return result;
+}
+
+/* the base is the first number of the right */
+int getInputedBase(char *input){
+    int base = -1;
+    int lastSpaceIndex = lastIndexOf(input, ' ');
+    if(lastSpaceIndex != -1){
+        //return in put base
+        char *val = substring(input, lastSpaceIndex+1, len(input));
+        sscanf(val, "%d", &base);
+        free(val);
+    }
+    return base;
 }
 
 /* For base between 0 and 9 :
@@ -81,34 +99,9 @@ double convertBigBaseToBaseTen(char *input, int base){
     return convertedValue;
 }
 
-double hexToBaseTen(char *input){
-    double convertedValue = 0;
-    int currentExponent = 0;
-
-    char *in = input+len(input)-2;
-    char *chartoint = "0123456789ABCDEF";
-    while (in != input-1){
-        int val = indexOf(chartoint, *in);
-        convertedValue+=val*power(16, currentExponent);
-        currentExponent++;
-        in--;
-    }
-    return convertedValue;
-}
-
-/* the base is the first number of the right */
-int getInputedBase(char *input){
-    int base = -1;
-    int lastSpaceIndex = lastIndexOf(input, ' ');
-    if(lastSpaceIndex != -1){
-        //return in put base
-        char *val = substring(input, lastSpaceIndex+1, len(input));
-        sscanf(val, "%d", &base);
-        free(val);
-    }
-    return base;
-}
-
+/* Convert the decimal number given to 
+ * a number in the numerical base given.
+ */
 char *convertDecimalToAnyBase(double decimal, int base){
     int *convertedNumberReversed = malloc(sizeof(int));
     int convertedNumberLength = 0;
@@ -147,6 +140,23 @@ char *convertDecimalToAnyBase(double decimal, int base){
     return convertedValue;
 }
 
+/* Convert an hex to decimal base. */
+double hexToBaseTen(char *input){
+    double convertedValue = 0;
+    int currentExponent = 0;
+
+    char *in = input+len(input)-2;
+    char *chartoint = "0123456789ABCDEF";
+    while (in != input-1){
+        int val = indexOf(chartoint, *in);
+        convertedValue+=val*power(16, currentExponent);
+        currentExponent++;
+        in--;
+    }
+    return convertedValue;
+}
+
+/* Convert decimal value to hex. */
 char *convertDecimalToHex(double decimal){
     char *hexValue = malloc(sizeof(char));
     *hexValue = '\0';
