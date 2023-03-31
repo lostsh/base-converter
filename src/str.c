@@ -17,10 +17,8 @@ unsigned int len(const char *word){
  */
 char *substring(char *string, int startIndex, int endIndex){
   int size = endIndex-startIndex;
-  //printf("Actual substring size: %d\n", size);
   char *substr = malloc((size+1)*sizeof(char));
   for(int i=startIndex; i<endIndex; i++){
-    //printf("\tCurrent letter: %c index: %d\n", *(string+i), (i-startIndex));
     *(substr+(i-startIndex)) = *(string+i);
   }
   *(substr+size) = '\0';
@@ -49,10 +47,5 @@ int lastIndexOf(const char *string, const char search){
  * start searching from 0 index
  */
 int indexOf(const char *string, const char search){
-  /*
-  int index = 0;
-  while (*(string+index) != '\0' && *(string+index) != search) index++;
-  return (*(string+index)==search)?index:-1;
-  */
  return indexOfFromIndex(string, 0, search);
 }
