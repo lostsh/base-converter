@@ -27,7 +27,8 @@
  * \author Vernhes Yohann <yohann.vernhes@gmail.com>
  * \version 1.0 First
  * \date 31 Mar 2023
- * \brief .
+ * \brief Get operating mode from arguments
+ * Get input values from pipe of prompt for it.
  * \param argc : arguments count.
  * \param argv : arguments values.
  * \return Success 0 else error code.
