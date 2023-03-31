@@ -85,6 +85,22 @@ double convertBigBaseToBaseTen(char *input, int base){
     return convertedValue;
 }
 
+double hexToBaseTen(char *input){
+    double convertedValue = 0;
+    int currentExponent = 0;
+
+    char *in = input+len(input)-2;
+    char *chartoint = "0123456789ABCDEF";
+    while (in != input-1){
+        int val = indexOf(chartoint, *in);
+        convertedValue+=val*power(16, currentExponent);
+        currentExponent++;
+        in--;
+    }
+    printf("\n");
+    return convertedValue;
+}
+
 /* the base is the first number of the right */
 int getInputedBase(char *input){
     int base = -1;
@@ -142,6 +158,36 @@ char *convertDecimalToAnyBase(double decimal, int base){
 
     //free(convertedValue);
     return convertedValue;
+}
+
+char *convertDecimalToHex(double decimal){
+    char *hexValue = malloc(sizeof(char));
+    *hexValue = '\0';
+    int hexValueSize = 0;
+
+    char *decitochar = "0123456789ABCDEF";
+    int dividend = (int)decimal;
+    while (dividend > 0){
+        int reminder = dividend%16;
+        int quotient = (dividend-reminder)/16;
+        dividend = quotient;
+
+        // add the current value to the char array
+        hexValueSize++;
+        hexValue = realloc(hexValue, (hexValueSize+1)*sizeof(char));
+        *(hexValue+hexValueSize-1) = *(decitochar+reminder);
+        *(hexValue+hexValueSize) = '\0';
+    }
+
+    // revert the order to have little Endian
+    int size = len(hexValue)-1;
+    for(int i=0; i<=size/2; i++){
+        char temp = *(hexValue+i);
+        *(hexValue+i) = *(hexValue+size-i);
+        *(hexValue+size-i) = temp;
+    }
+
+    return hexValue;
 }
 
 /**
@@ -240,6 +286,7 @@ int main(int argc, char **argv){
             decimalValue = convertSmallBaseToBaseTen(inputNumber, base);
         }else if(base == 16){
             // extract from base 16
+            decimalValue = hexToBaseTen(inputNumber);
         }else{
             //extract from big base
             decimalValue = convertBigBaseToBaseTen(inputNumber, base);
@@ -249,7 +296,12 @@ int main(int argc, char **argv){
         printf("%.2f(10)\n", decimalValue);
     }else{
         //compute convertion from decimal to any base
-        char *value = convertDecimalToAnyBase(atof(inputNumber), base);
+        char *value;
+        if(base == 16){
+            value = convertDecimalToHex(atof(inputNumber));
+        }else{
+            value = convertDecimalToAnyBase(atof(inputNumber), base);
+        }
 
         printf("\033[0;105m[ = ]%s\t", COLOR_RST);
         printf("%s(%d)\n", value, base);
