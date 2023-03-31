@@ -156,14 +156,58 @@ char *convertDecimalToAnyBase(double decimal, int base){
  */
 int main(int argc, char **argv){
     printf("\033[0;104m[ + ]\t%sWELLCOME TO THE %sBase %sCONVERTER%s\n", COLOR_RED, COLOR_BBLU, COLOR_RED, COLOR_RST);
-    //printf("\033[0;104m[ * ]\t%sInput form: ([valueToConvert])[base]\n\texample: (0101)2 => (5)10\n", COLOR_RST);
 
     if(argc < 2){
         fprintf(stderr, "\033[0;101m[ ! ]%s\tError: missing arg\n", COLOR_RST);
-        fprintf(stdout, "\033[0;103m[ - ]%s\tUsage:  %s --from-decimal-to-any\n", COLOR_RST, *argv);
-        fprintf(stdout, "\033[0;103m[ - ]%s\t\t%s --from-any-to-decimal\n", COLOR_RST, *argv);
+        fprintf(stdout, "\033[0;103m[ - ]%s\tUsage:  %s --from-decimal-to-any | -d\n", COLOR_RST, *argv);
+        fprintf(stdout, "\033[0;103m[ - ]%s\t\t%s --from-any-to-decimal | -a\n", COLOR_RST, *argv);
         return(EXIT_FAILURE);
     }
+
+    int operatingMode = -1;
+    //check for short input
+    if(len(argv[1]) == 2 && *(*(argv+1)) == '-' ){
+        if( *(*(argv+1)+1) == 'd' ){
+            operatingMode = 0;
+        }else if( *(*(argv+1)+1) == 'a' ){
+            operatingMode = 1;
+        }else{
+            fprintf(stderr, "\033[0;101m[ ! ]%s\tError: arg format exception\n", COLOR_RST);
+            printf("\033[0;103m[ - ]%s\tUsage:  %s --from-decimal-to-any | -d\n", COLOR_RST, *argv);
+            printf("\033[0;103m[ - ]%s\t\t%s --from-any-to-decimal | -a\n", COLOR_RST, *argv);
+            return (EXIT_FAILURE);
+        }
+    }else{
+        // full in put mode
+        char *firstOption = "--from-decimal-to-any";
+        char *secondOption = "--from-any-to-decimal";
+        int isValid = 1;
+        char *c = argv[1];
+        do
+        {
+            isValid = (*c == *firstOption || *c == *secondOption);
+            if(*c == *firstOption)firstOption++;
+            if(*c == *secondOption)secondOption++;
+            c++;
+        } while (*c != '\0' && *firstOption != '\0' && *secondOption != '\0' && isValid);
+
+        // check the input validity
+        isValid = (*firstOption == '\0' || *secondOption == '\0') && *c == '\0';
+
+        // swtich operating mode depending on the input
+        if(isValid){
+            if(*firstOption == '\0') operatingMode = 0;
+            else operatingMode = 1;
+        }else{
+            fprintf(stderr, "\033[0;101m[ ! ]%s\tError: arg format exception\n", COLOR_RST);
+            printf("\033[0;103m[ - ]%s\tUsage:  %s --from-decimal-to-any | -d\n", COLOR_RST, *argv);
+            printf("\033[0;103m[ - ]%s\t\t%s --from-any-to-decimal | -a\n", COLOR_RST, *argv);
+            return (EXIT_FAILURE);
+        }
+    }
+
+    printf("Current operating mode is %s\n", (!operatingMode)?"decimal to any":"any to decimal");
+    
 
     //for (int i = 0; i < 9; i++)printf("\033[0;10%dm[ + ]\t%sColor test\n", i, COLOR_RST);
     
@@ -177,25 +221,27 @@ int main(int argc, char **argv){
 
     free(in);
     in = NULL;
-
-
+    
     // Compute conversion from anybase to decimal
-    double decimalValue = 0;
-    if(base < 9){
-        //extract small base
-        decimalValue = convertSmallBaseToBaseTen(inputNumber, base);
-    }else if(base == 16){
-        // extract from base 16
+    if(operatingMode){
+        double decimalValue = 0;
+        if(base < 9){
+            //extract small base
+            decimalValue = convertSmallBaseToBaseTen(inputNumber, base);
+        }else if(base == 16){
+            // extract from base 16
+        }else{
+            //extract from big base
+            decimalValue = convertBigBaseToBaseTen(inputNumber, base);
+        }
+        free(inputNumber);
+        inputNumber = NULL;
+
+        printf("\033[0;105m[ = ]%s\t", COLOR_RST);
+        printf("%.2f(10)\n", decimalValue);
     }else{
-        //extract from big base
-        decimalValue = convertBigBaseToBaseTen(inputNumber, base);
+        //compute convertion from decimal to any base
     }
-    free(inputNumber);
-    inputNumber = NULL;
-
-    printf("\033[0;105m[ = ]%s\t", COLOR_RST);
-    printf("%.2f(10)\n", decimalValue);
-
 
     /*
     char *outputValue;
