@@ -17,6 +17,7 @@
 #include "convert.h"
 #include "str.h"
 
+/* Get number at the power of exponent. */
 double power(int number, int exponent){
     double result = 1;
 

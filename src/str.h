@@ -1,3 +1,11 @@
+/**
+ * \file str.h
+ * \version 1.0 First
+ * \author Vernhes Yohann <yohann.vernhes@gmail.com>
+ * \date 31 March 2023
+ * \brief Base converter.
+ * String module header file.
+ */
 #ifndef STR_H
 #define STR_H
 

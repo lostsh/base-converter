@@ -1,3 +1,13 @@
+/**
+ * \file str.c
+ * \version 1.0 First
+ * \author Vernhes Yohann <yohann.vernhes@gmail.com>
+ * \date 31 March 2023 
+ * \brief Base converter.
+ * String module.
+ * First version is scrappy.
+ */
+
 #include <stdlib.h>
 #include "str.h"
 

@@ -14,7 +14,7 @@
  * \author Vernhes Yohann <yohann.vernhes@gmail.com>
  * \version 1.0 First
  * \date 31 March 2023 
- * \brief get number at the power of exponent.
+ * \brief Get number at the power of exponent.
  * Negative exponent supported.
  */
 double power(int number, int exponent);
