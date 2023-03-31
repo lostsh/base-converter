@@ -25,7 +25,7 @@
  * For base bigger than 9 :
  * Input form : (23 2F D4)16
 */
-void convertSmallBaseToBaseTen(char *input, int base){
+double convertSmallBaseToBaseTen(char *input, int base){
     /* input form (numbers)base*/
     int number;
     sscanf(input, "%d", &number);
@@ -45,13 +45,15 @@ void convertSmallBaseToBaseTen(char *input, int base){
         number = number/10;
         currentExponent++;
     }
-    printf("Value: (%.2f)10\n", convertedValue);
+    //printf("Value: (%.2f)10\n", convertedValue);
+    return convertedValue;
 }
+
 /* For input base > 9 
  * input must have no base inside number space seperated 
  * with a space at the end
  */
-void convertBigBaseToBaseTen(char *input, int base){
+double convertBigBaseToBaseTen(char *input, int base){
     double convertedValue = 0;
     
     int cursor = len(input)-1;
@@ -79,7 +81,8 @@ void convertBigBaseToBaseTen(char *input, int base){
         cursor--;
     }
     
-    printf("Value: (%.2f)10\n", convertedValue);
+    //printf("Value: (%.2f)10\n", convertedValue);
+    return convertedValue;
 }
 
 /* the base is the first number of the right */
@@ -95,7 +98,7 @@ int getInputedBase(char *input){
     return base;
 }
 
-void convertDecimalToAnyBase(double decimal, int base){
+char *convertDecimalToAnyBase(double decimal, int base){
     int *convertedNumberReversed = malloc(sizeof(int));
     int convertedNumberLength = 0;
 
@@ -104,9 +107,9 @@ void convertDecimalToAnyBase(double decimal, int base){
     while (dividend > 0){
         int reminder = dividend%base;
         int quotient = (dividend-reminder)/base;
-        printf("%d/%d=%d*%d+%d\n", dividend, base, base, quotient, reminder);
+        //printf("%d/%d=%d*%d+%d\n", dividend, base, base, quotient, reminder);
         dividend = quotient;
-        printf("Chiffre a noter (reste): %d (et le truc a re-diviser %d)\n", reminder, quotient);
+        //printf("Chiffre a noter (reste): %d (et le truc a re-diviser %d)\n", reminder, quotient);
 
         // add the current value to the stack
         convertedNumberReversed = realloc(convertedNumberReversed, (convertedNumberLength+1)*sizeof(int));
@@ -135,9 +138,10 @@ void convertDecimalToAnyBase(double decimal, int base){
     }
     free(convertedNumberReversed);
 
-    printf("Final value [%s]\n", convertedValue);
+    //printf("Final value [%s]\n", convertedValue);
 
-    free(convertedValue);
+    //free(convertedValue);
+    return convertedValue;
 }
 
 /**
@@ -153,27 +157,55 @@ void convertDecimalToAnyBase(double decimal, int base){
 int main(int argc, char **argv){
     printf("\033[0;104m[ + ]\t%sWELLCOME TO THE %sBase %sCONVERTER%s\n", COLOR_RED, COLOR_BBLU, COLOR_RED, COLOR_RST);
     //printf("\033[0;104m[ * ]\t%sInput form: ([valueToConvert])[base]\n\texample: (0101)2 => (5)10\n", COLOR_RST);
+
+    if(argc < 2){
+        fprintf(stderr, "\033[0;101m[ ! ]%s\tError: missing arg\n", COLOR_RST);
+        fprintf(stdout, "\033[0;103m[ - ]%s\tUsage:  %s --from-decimal\n", COLOR_RST, *argv);
+        fprintf(stdout, "\033[0;103m[ - ]%s\t\t%s --from-any-base\n", COLOR_RST, *argv);
+        return(EXIT_FAILURE);
+    }
+
+    //for (int i = 0; i < 9; i++)printf("\033[0;10%dm[ + ]\t%sColor test\n", i, COLOR_RST);
+    
     
     char *in;
     getPipeInput(&in);
 
+    // parse input
     int base = getInputedBase(in);
     char *inputNumber = substring(in, 0, lastIndexOf(in, ' ')+1);
-    if(base < 9){
-        //extract small base
-        convertSmallBaseToBaseTen(inputNumber, base);
-    }else if(base == 16){
-        // extract from base 16
-    }else{
-        //extract from big base
-        convertBigBaseToBaseTen(inputNumber, base);
-    }
-    free(inputNumber);
-    inputNumber = NULL;
 
     free(in);
     in = NULL;
 
+
+    // Compute conversion from anybase to decimal
+    double decimalValue = 0;
+    if(base < 9){
+        //extract small base
+        decimalValue = convertSmallBaseToBaseTen(inputNumber, base);
+    }else if(base == 16){
+        // extract from base 16
+    }else{
+        //extract from big base
+        decimalValue = convertBigBaseToBaseTen(inputNumber, base);
+    }
+    free(inputNumber);
+    inputNumber = NULL;
+
+    printf("\033[0;105m[ = ]%s\t", COLOR_RST);
+    printf("%.2f(10)\n", decimalValue);
+
+
+    /*
+    char *outputValue;
+    free(outputValue);
+    outputValue = NULL;
+    */
+
+    
+
+    /*
     convertDecimalToAnyBase(5.998, 2);
     printf("\n");
     convertDecimalToAnyBase(4, 2);
@@ -184,6 +216,7 @@ int main(int argc, char **argv){
     printf("\n");
     convertBigBaseToBaseTen("10 13 ", 16);
     printf("\n");
+    */
 
     // Exit success
     return (EXIT_SUCCESS);
