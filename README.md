@@ -1,50 +1,92 @@
-Any Base to Any Base converter
+# Computer Organization and Architecture - Assignment 01 _[Numerical base converter]_
 
-Convert from any base to any base
+## Requirements
 
-Any decimal number can be convert to bin
+|   Techno   | Version |
+|:----------:|---------|
+|    C       |   C99   |
+|    gcc     |   11    |
+|    make    |   4.2   | 
 
-()anybase =>to=>()base10 (multiplication)
+*Possible to use without `make`*
 
-(nn.nn)any
+> System libs requirements
+> - `stdlib.h`
+> - `stdio.h`
 
-dabord la partie entière  on multiplie par la base courante
-pour ce qui reste, O.nn
-on fais exposant -1 -2 -3
+>> Custom embedded libs
+>> - `input.h` : User input management system.
+>> - `str.h` : Lightweight simple string management system.
+>> - `convert.h` : Module containing the numeric conversion functions between bases.
 
-EXO: 
+### Structure
+```bash
+.
+├── bin
+├── demo.mp4
+├── doc
+├── Doxyfile
+├── Makefile
+├── README.md
+└── src
+    ├── convert.c
+    ├── convert.h
+    ├── input.c
+    ├── input.h
+    ├── main.c
+    ├── str.c
+    └── str.h
 
-(65.4)8 => (?)10 [Conversion de base 8 en base 10)
+3 directories, 11 files
+```
 
-6*8¹ + 5*8⁰  .  4*8⁻¹
+## Getting Started
 
-(F6.7)16  => (?)10
-10*16¹ + 6*16¹  . 7*16⁻¹
+### Compile **With `make`**
+> Go to the root folder which contains the `Makefile` and the `src` folder.
 
+Just type the make command :
+```bash
+make
+```
+*Generates the executable in the `bin` folder.*
 
+### Compile **Without `make`**
+Just type the make command :
+```bash
+gcc -g -std=c99 src/str.c src/input.c src/convert.c src/main.c -o bin/main
+```
+*Generates the executable in the `bin` folder.*
 
-From base 10 to any base (division)
+### Run
+> Once the compilation has been validated, all that remains is to execute the compiled file which is in the `bin` folder.
+Just type the make command :
+```bash
+./bin/main
+```
 
-(41.78)10  => (?)2
-To convert the decimal part : 
-1: mul by 2
-2: collect the INT part
-3: separate fract
-REPEAT
+### How to use
+The program takes the operating mode as a parameter. There are two modes: Conversion from decimal base to a given base. Conversion from a given base to the decimal base.
 
+Two modes of use redirect the output of a command via the pipe, or directly launch the program and enter the values.
 
-You can also use the base propriety like 
-en base 8 on prend 3 bit d'un coup pour convertir
-pour le base 16 on prend 4 bit d'un coup pour convertir
+```bash
+# Using the pipe :
+echo "5 2" | ./bin/main --from-decimal-to-any
+echo "0101 2" | ./bin/main --from-any-to-decimal
 
+# Input during execution :
+./bin/main --from-decimal-to-any
+5 2
 
-(Alpha+Special char)  => (bits) WE NEED ENCODING : ASCII
+./bin/main --from-any-to-decimal
+0101 2
+```
+*Example of input via redirect and vie direct input*
 
-Negative numbers
-    - Sign magnitude : for the sign we use a bit 0 or 1 who represent - or + 
-    - 1's complement : 
-    - 2's complement : 
+## Example 
+![Example of compilation & input / output](example.png)
 
+You can watch an example video of how to use the program: [demo.mp4](demo.mp4)
 
-Scientific notation x10⁻¹  ...
-
+## Troubleshooting
