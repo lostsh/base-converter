@@ -157,6 +157,11 @@ char *convertDecimalToAnyBase(double decimal, int base){
 int main(int argc, char **argv){
     printf("\033[0;104m[ + ]\t%sWELLCOME TO THE %sBase %sCONVERTER%s\n", COLOR_RED, COLOR_BBLU, COLOR_RED, COLOR_RST);
 
+    /* Actual operation mode input
+     * get the operation mode from
+     * command line arguments
+    */
+
     if(argc < 2){
         fprintf(stderr, "\033[0;101m[ ! ]%s\tError: missing arg\n", COLOR_RST);
         fprintf(stdout, "\033[0;103m[ - ]%s\tUsage:  %s --from-decimal-to-any | -d\n", COLOR_RST, *argv);
@@ -206,11 +211,16 @@ int main(int argc, char **argv){
         }
     }
 
-    printf("Current operating mode is %s\n", (!operatingMode)?"decimal to any":"any to decimal");
+    printf("\033[0;105m[ = ]%s\t", COLOR_RST);
+    printf("Actually convert from %s.\n", (!operatingMode)?"decimal to any":"any to decimal");
     
+    // enable below line only if remove pipe input support
+    //printf("\033[0;107m[ > ]%s\t", COLOR_RST);
 
-    //for (int i = 0; i < 9; i++)printf("\033[0;10%dm[ + ]\t%sColor test\n", i, COLOR_RST);
-    
+    /* Actual converting system
+     * operatingMode 0 : convert from decimal to any base
+     * operatingMode 1 : convert from any base to decimal
+    */
     
     char *in;
     getPipeInput(&in);
@@ -234,36 +244,20 @@ int main(int argc, char **argv){
             //extract from big base
             decimalValue = convertBigBaseToBaseTen(inputNumber, base);
         }
-        free(inputNumber);
-        inputNumber = NULL;
 
         printf("\033[0;105m[ = ]%s\t", COLOR_RST);
         printf("%.2f(10)\n", decimalValue);
     }else{
         //compute convertion from decimal to any base
+        char *value = convertDecimalToAnyBase(atof(inputNumber), base);
+
+        printf("\033[0;105m[ = ]%s\t", COLOR_RST);
+        printf("%s(%d)\n", value, base);
+        free(value);
     }
 
-    /*
-    char *outputValue;
-    free(outputValue);
-    outputValue = NULL;
-    */
+    free(inputNumber);
+    inputNumber = NULL;
 
-    
-
-    /*
-    convertDecimalToAnyBase(5.998, 2);
-    printf("\n");
-    convertDecimalToAnyBase(4, 2);
-    printf("\n");
-    convertDecimalToAnyBase(87987988, 209);
-    printf("\n");
-    convertDecimalToAnyBase(173, 16);
-    printf("\n");
-    convertBigBaseToBaseTen("10 13 ", 16);
-    printf("\n");
-    */
-
-    // Exit success
     return (EXIT_SUCCESS);
 }
