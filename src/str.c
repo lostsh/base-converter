@@ -44,6 +44,13 @@ int indexOfFromIndex(const char *string, int startIndex, const char search){
   return (*(string+index)==search)?index:-1;
 }
 
+/* Get the first occurence of search in string
+ * start searching from 0 index
+ */
+int indexOf(const char *string, const char search){
+ return indexOfFromIndex(string, 0, search);
+}
+
 /* Get the last occurence of search in string
  * search backward from the end to the beginning
  */
@@ -51,11 +58,4 @@ int lastIndexOf(const char *string, const char search){
   int index = len(string);
   while(index >= 0 && *(string+index) != search) index--;
   return (*(string+index) == search)?index:-1;
-}
-
-/* Get the first occurence of search in string
- * start searching from 0 index
- */
-int indexOf(const char *string, const char search){
- return indexOfFromIndex(string, 0, search);
 }
