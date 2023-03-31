@@ -160,8 +160,8 @@ int main(int argc, char **argv){
 
     if(argc < 2){
         fprintf(stderr, "\033[0;101m[ ! ]%s\tError: missing arg\n", COLOR_RST);
-        fprintf(stdout, "\033[0;103m[ - ]%s\tUsage:  %s --from-decimal\n", COLOR_RST, *argv);
-        fprintf(stdout, "\033[0;103m[ - ]%s\t\t%s --from-any-base\n", COLOR_RST, *argv);
+        fprintf(stdout, "\033[0;103m[ - ]%s\tUsage:  %s --from-decimal-to-any\n", COLOR_RST, *argv);
+        fprintf(stdout, "\033[0;103m[ - ]%s\t\t%s --from-any-to-decimal\n", COLOR_RST, *argv);
         return(EXIT_FAILURE);
     }
 
