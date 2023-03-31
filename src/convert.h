@@ -11,4 +11,16 @@
 
 double power(int number, int exponent);
 
+double convertSmallBaseToBaseTen(char *input, int base);
+
+double convertBigBaseToBaseTen(char *input, int base);
+
+double hexToBaseTen(char *input);
+
+int getInputedBase(char *input);
+
+char *convertDecimalToAnyBase(double decimal, int base);
+
+char *convertDecimalToHex(double decimal);
+
 #endif /* CONVERT_H */
